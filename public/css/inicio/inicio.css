@@ -1,0 +1,458 @@
+/* encabezado: el control de ubicación queda disponible sin competir con el título */
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.encabezado h1 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    overflow-wrap: anywhere;
+}
+
+.boton-ubicacion,
+.boton-ubicacion-actual {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.boton-ubicacion {
+    padding: 8px 12px;
+    border: 1px solid var(--neutro);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--texto);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.boton-ubicacion:hover {
+    background: var(--cards);
+    filter: none;
+}
+
+/* presentación principal del clima observado */
+.clima-principal {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.clima-principal h2 {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+}
+
+.clima-principal p {
+    margin-top: 8px;
+    opacity: 0.95;
+}
+
+.clima-principal .descripcion-clima {
+    font-size: 1.15rem;
+    text-transform: capitalize;
+}
+
+/* pronóstico por horas: cada intervalo conserva un ancho legible y permite deslizar */
+.seccion-horas,
+.seccion-dias {
+    margin-top: 20px;
+}
+
+.titulo-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.titulo-seccion h2,
+.seccion-dias h2 {
+    font-size: 1.15rem;
+}
+
+.ayuda-deslizamiento {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.lista-horas {
+    display: flex;
+    gap: 14px;
+    margin-top: 15px;
+    overflow-x: auto;
+    padding: 2px 2px 12px;
+    scrollbar-color: var(--secundario) rgba(255, 255, 255, 0.18);
+    scrollbar-width: thin;
+    scroll-snap-type: x proximity;
+}
+
+.hora {
+    display: flex;
+    flex: 0 0 88px;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    text-align: center;
+    scroll-snap-align: start;
+}
+
+.hora i {
+    color: var(--secundario);
+    font-size: 1.35rem;
+}
+
+.descripcion-pronostico {
+    font-size: 0.78rem;
+    opacity: 0.88;
+    text-transform: capitalize;
+}
+
+/* pronóstico diario con descripción y temperaturas extremas */
+.lista-dias {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 15px;
+}
+
+.dia {
+    display: grid;
+    grid-template-columns: minmax(85px, 1fr) 28px minmax(100px, 1.4fr) auto;
+    align-items: center;
+    gap: 10px;
+    text-transform: capitalize;
+}
+
+.dia > i {
+    color: var(--secundario);
+    text-align: center;
+}
+
+.nombre-dia {
+    font-weight: 600;
+}
+
+.temperaturas-dia {
+    display: flex;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+.temperaturas-dia span {
+    opacity: 0.8;
+}
+
+.mensaje-vacio {
+    margin-top: 14px;
+    opacity: 0.9;
+}
+
+/* datos complementarios en dos columnas */
+.grid-detalles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.detalle-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+}
+
+.detalle-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.detalle-card i {
+    min-width: 1.5em;
+    color: var(--secundario);
+    font-size: 1.35rem;
+    text-align: center;
+}
+
+.detalle-card span {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* fondo translúcido y contenido centrado del buscador modal */
+.modal-ubicacion {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: transparent;
+    backdrop-filter: blur(8px);
+}
+
+.modal-ubicacion.mostrar {
+    display: flex;
+}
+
+.modal-contenido {
+    position: relative;
+    width: min(100%, 440px);
+    max-height: min(90vh, 680px);
+    overflow-y: auto;
+    padding: 30px 24px 24px;
+    border-radius: 15px;
+    background-color: var(--cards);
+    color: var(--texto);
+    text-align: center;
+}
+
+.boton-cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.boton-cerrar-modal:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.icono-modal {
+    margin: 10px 0;
+    color: var(--secundario);
+    font-size: 1.5rem;
+}
+
+.modal-titulo {
+    margin-bottom: 18px;
+    font-size: 1.2rem;
+}
+
+.contenedor-buscador {
+    position: relative;
+    width: 100%;
+}
+
+.input-modal {
+    width: 100%;
+    min-height: 48px;
+    padding: 11px 13px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: #fff;
+    color: #17212b;
+    font: inherit;
+}
+
+.input-modal:focus {
+    border-color: var(--primario);
+    outline: 3px solid rgba(0, 175, 185, 0.3);
+}
+
+/* sugerencias y estados visuales del autocompletado */
+.sugerencias-lista {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 0;
+    border-radius: 0 0 10px 10px;
+    background: #fff;
+    color: #17212b;
+    list-style: none;
+    text-align: left;
+}
+
+.sugerencia-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 12px;
+    color: #173c4d;
+    cursor: pointer;
+}
+
+.sugerencia-item:hover,
+.sugerencia-item[aria-selected="true"] {
+    background: #e5f4f4;
+}
+
+.sugerencia-item i {
+    color: #087c86;
+}
+
+.sugerencia-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* controles del buscador y mensajes de estado */
+.estado-busqueda {
+    min-height: 1.4em;
+    margin: 8px 0;
+    color: #e7f2f7;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.boton-buscar,
+.boton-ubicacion-actual {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 650;
+}
+
+.boton-buscar {
+    margin-top: 4px;
+}
+
+.boton-buscar:disabled,
+.boton-ubicacion-actual:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.separador-modal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    color: #e7f2f7;
+}
+
+.separador-modal::before,
+.separador-modal::after {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.35);
+    content: "";
+}
+
+.boton-ubicacion-actual {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: transparent;
+    color: #fff;
+}
+
+.boton-ubicacion-actual:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.texto-error {
+    min-height: 1.4em;
+    margin-top: 10px;
+    color: #ffe0dc;
+    font-size: 0.9rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+/* pantalla de recuperación para errores de consulta */
+.pagina-error {
+    display: flex;
+    min-height: 100vh;
+    max-width: 560px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto;
+    padding: 24px;
+    text-align: center;
+}
+
+.pagina-error > i {
+    color: var(--secundario);
+    font-size: 3rem;
+}
+
+.pagina-error h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+.enlace-reintentar {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: var(--acento);
+    color: #17212b;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+/* ajustes para móviles: compacta tarjetas sin cambiar la grilla de dos columnas */
+@media (max-width: 600px) {
+    .encabezado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .grid-detalles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .detalle-card {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .detalle-card i {
+        font-size: 1.15rem;
+    }
+
+    .dia {
+        grid-template-columns: minmax(76px, 1fr) 24px auto;
+        gap: 8px;
+    }
+
+    .dia .descripcion-pronostico {
+        display: none;
+    }
+
+    .ayuda-deslizamiento {
+        display: inline;
+    }
+
+    .modal-contenido {
+        padding: 28px 18px 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lista-horas {
+        scroll-behavior: auto;
+    }
+}

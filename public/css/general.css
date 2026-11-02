@@ -1,0 +1,142 @@
+/* * PALETA DE COLORES: tokens compartidos por todos los componentes. */
+:root {
+  /* paleta principal */
+    --fondo: #0081a7ff;
+    --primario: #00afb9ff;
+    --cards: rgba(255, 255, 255, 0.2);
+    --secundario: #fed9b7ff;
+    --acento: #f07167ff;
+    --color-acento: var(--acento);
+
+  /* colores de estado */
+    --confirmado: #28a745;
+    --precaucion: #ffc107;
+    --advertencia: #fd7e14;
+    --peligro: #dc3545;
+    --neutro: #6c757d;
+
+  /* texto */
+    --texto: #f8f9fa;
+}
+
+/* * UTILIDADES ----------------------------------------------------- */
+.hidden {
+    display: none !important;
+}
+
+.destacar {
+    color: var(--acento) !important;
+}
+
+/* * CUERPO --------------------------------------------------------- */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* evita que el contenido de fondo se desplace mientras el diálogo está abierto. */
+body.modal-abierto {
+    overflow: hidden;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--fondo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.tema-dia {
+    --fondo: #006f8e;
+}
+
+body.tema-noche {
+    --fondo: #0a3683;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: var(--cards);
+    padding: 15px;
+    border-radius: 20px;
+}
+
+/* * BOTONES -------------------------------------------------------- */
+
+button {
+    padding: 10px 15px;
+    background-color: var(--acento);
+    color: #17212b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(1.06);
+}
+
+button:focus-visible,
+[tabindex="0"]:focus-visible,
+.lista-horas:focus-visible {
+    outline: 3px solid var(--secundario);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/** toastify -------------------------------------------------------- */
+.toastify {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 50px;
+    margin: 10px;
+}
+
+.toastify .toast-close {
+    opacity: 0.8;
+    padding-left: 10px;
+}
+
+.toast-error {
+    background: var(--peligro);
+}
+
+.toast-exito {
+    background: var(--confirmado);
+}
+
+.toast-info {
+    background: var(--neutro);
+}
+
+/* Crédito del proveedor de datos meteorológicos. */
+.pie-pagina {
+    padding: 16px 20px 24px;
+    color: var(--texto);
+    font-size: 0.8rem;
+    opacity: 0.85;
+    text-align: center;
+}
+
+.pie-pagina a {
+    color: inherit;
+    text-underline-offset: 3px;
+}

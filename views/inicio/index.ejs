@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../secciones/head') %>
+    <link rel="stylesheet" href="/css/inicio/inicio.css">
+</head>
+<body class="<%= esDeDia ? 'tema-dia' : 'tema-noche' %>">
+    <div class="contenedor">
+        <!-- encabezado y acceso secundario para cambiar la ubicación consultada -->
+        <header class="encabezado">
+            <h1>Clima en <%= ciudad %></h1>
+            <button id="btn-modal-ubicacion" class="boton-ubicacion" type="button" aria-haspopup="dialog" aria-controls="modalUbicacion">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                <span>Cambiar ubicación</span>
+            </button>
+        </header>
+
+        <main>
+        <!-- condiciones observadas: temperatura, descripción y extremos actuales -->
+        <section class="clima-principal" aria-label="Clima actual">
+            <h2><%= Math.round(temperatura) %>°</h2>
+            <p class="descripcion-clima"><%= descripcionClima %></p>
+            <p>Máx. <%= Math.round(tempMax) %>° <span aria-hidden="true">·</span> Mín. <%= Math.round(tempMin) %>°</p>
+        </section>
+
+        <!-- pronóstico en intervalos de tres horas; la lista puede desplazarse horizontalmente. -->
+        <section class="seccion-horas card" aria-labelledby="titulo-horas">
+            <div class="titulo-seccion">
+                <h2 id="titulo-horas">Próximas 24 horas</h2>
+                <span class="ayuda-deslizamiento">Deslizá para ver más <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+            </div>
+            <% if (pronosticoHoras.length) { %>
+            <div class="lista-horas" tabindex="0" aria-label="Pronóstico del día; desplazamiento horizontal">
+                <% pronosticoHoras.forEach(hora => { %>
+                <div class="hora">
+                    <span><%= hora.hora %></span>
+                    <i class="fa-solid <%= hora.icono %>" aria-hidden="true"></i>
+                    <span><%= hora.temperatura %>°C</span>
+                    <span class="descripcion-pronostico"><%= hora.descripcion %></span>
+                </div>
+                <% }) %>
+            </div>
+            <% } else { %>
+            <p class="mensaje-vacio">No hay pronóstico por hora disponible.</p>
+            <% } %>
+        </section>
+
+        <!-- pronóstico diario agregado por fecha local, con máximas y mínimas. -->
+        <section class="seccion-dias card" aria-labelledby="titulo-dias">
+            <h2 id="titulo-dias">Próximos días</h2>
+            <% if (pronosticoDias.length) { %>
+            <div class="lista-dias">
+                <% pronosticoDias.forEach(dia => { %>
+                <div class="dia">
+                    <span class="nombre-dia"><%= dia.nombre %></span>
+                    <i class="fa-solid <%= dia.icono %>" aria-hidden="true"></i>
+                    <span class="descripcion-pronostico"><%= dia.descripcion %></span>
+                    <span class="temperaturas-dia" aria-label="Máxima <%= dia.maxima %> grados, mínima <%= dia.minima %> grados">
+                        <strong><%= dia.maxima %>°</strong>
+                        <span><%= dia.minima %>°</span>
+                    </span>
+                </div>
+                <% }) %>
+            </div>
+            <% } else { %>
+            <p class="mensaje-vacio">No hay pronóstico para los próximos días.</p>
+            <% } %>
+        </section>
+
+        <!-- datos complementarios del clima actual, agrupados en una grilla -->
+        <section class="grid-detalles" aria-label="Detalles del clima actual">
+            <div class="card detalle-card">
+                <i class="fa-solid fa-temperature-three-quarters" aria-hidden="true"></i>
+                <div><span>Sensación térmica</span><strong><%= Math.round(sensacionTermica) %>°C</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+                <div><span>Humedad</span><strong><%= humedad %>%</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-wind" aria-hidden="true"></i>
+                <div><span>Viento</span><strong><%= Math.round(viento * 3.6) %> km/h</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                <div><span>Presión</span><strong><%= presion %> hPa</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                <div><span>Visibilidad</span><strong><%= visibilidad %> km</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-cloud" aria-hidden="true"></i>
+                <div><span>Nubosidad</span><strong><%= nubosidad %>%</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-sun" aria-hidden="true"></i>
+                <div><span>Amanecer</span><strong><%= amanecer %></strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-moon" aria-hidden="true"></i>
+                <div><span>Atardecer</span><strong><%= atardecer %></strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-wind" aria-hidden="true"></i>
+                <div><span>Ráfagas</span><strong><%= rafagas %> km/h</strong></div>
+            </div>
+            <div class="card detalle-card">
+                <i class="fa-solid fa-compass" aria-hidden="true"></i>
+                <div><span>Dirección del viento</span><strong><%= direccionViento %>°</strong></div>
+            </div>
+        </section>
+        </main>
+
+        <!-- modal para buscar una ciudad o volver a solicitar la ubicación del dispositivo. -->
+        <div id="modalUbicacion" class="modal-ubicacion" aria-hidden="true">
+            <section class="modal-contenido" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-ubicacion" tabindex="-1">
+                <button id="cerrar-modal-ubicacion" class="boton-cerrar-modal" type="button" aria-label="Cerrar búsqueda de ubicación">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+                <i class="icono-modal fa-solid fa-location-dot" aria-hidden="true"></i>
+                <h2 id="titulo-modal-ubicacion" class="modal-titulo">¿Qué lugar querés consultar?</h2>
+                <form id="form-clima" action="/" method="GET">
+                    <label class="sr-only" for="ciudad">Ciudad o localidad</label>
+                    <div class="contenedor-buscador">
+                        <input type="search" id="ciudad" name="ciudadBuscada" autocomplete="off" placeholder="Ej.: Buenos Aires" required maxlength="100" class="input-modal" aria-label="Buscar ciudad" aria-autocomplete="list" aria-controls="sugerencias" aria-expanded="false">
+                        <ul id="sugerencias" class="sugerencias-lista" role="listbox" aria-label="Ciudades sugeridas" aria-live="polite"></ul>
+                    </div>
+                    <p id="estado-busqueda" class="estado-busqueda" role="status" aria-live="polite">Escribí al menos 3 letras para ver sugerencias.</p>
+                    <button id="btn-buscar-ciudad" class="boton-buscar" type="submit">Ver clima</button>
+                </form>
+                <div class="separador-modal"><span>o</span></div>
+                <button id="btn-ubicacion-actual" class="boton-ubicacion-actual" type="button">
+                    <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+                    Usar mi ubicación actual
+                </button>
+                <p id="errorModal" class="texto-error" aria-live="polite"></p>
+            </section>
+        </div>
+    </div>
+    
+    <%- include('../secciones/footer') %>
+
+    <script src="/js/inicio/ubicacion.js"></script>
+    
+</body>
+</html>

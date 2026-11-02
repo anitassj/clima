@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../secciones/head') %>
+    <link rel="stylesheet" href="/css/inicio/inicio.css">
+</head>
+<body>
+    <!-- estado de recuperación mostrado cuando falla la consulta de clima -->
+    <main class="pagina-error">
+        <i class="fa-solid fa-cloud-bolt" aria-hidden="true"></i>
+        <h1>No pudimos cargar el pronóstico</h1>
+        <p>Revisá la conexión o la ubicación e intentá nuevamente en unos minutos.</p>
+        <a class="enlace-reintentar" href="/">Volver a intentar</a>
+    </main>
+    <%- include('../secciones/footer') %>
+</body>
+</html>
